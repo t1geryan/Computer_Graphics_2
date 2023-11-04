@@ -1,7 +1,5 @@
 #pragma once
 #include "Model2D.h"
-#include <wtypes.h>
-#include <Windows.h>
 
 class Render2D
 {

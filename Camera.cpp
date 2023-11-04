@@ -8,7 +8,7 @@ Camera::Camera(Vector2D coordinates): x(coordinates.x()), y(coordinates.y())
 
 Vector2D Camera::toScreenCoordiantes(int width, int height)
 {
-    double delta = 8;
-    double newX = (x + delta)*0.5*width, newY = (delta - y)*0.5*height;
+    double deltaX = 10, deltaY = 5;
+    double newX = (x + deltaX)*0.5*width, newY = (deltaY - y)*0.5*height;
     return Vector2D(newX, newY);
 }

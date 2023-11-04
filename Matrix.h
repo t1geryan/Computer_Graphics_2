@@ -17,14 +17,17 @@ public:
 	Matrix() : n_nRows(0), n_nCols(0), m_cells(nullptr) {}
 	Matrix(const Matrix&);
 	Matrix(int, int);
-	Matrix(int, int, Cell*);
+	Matrix(int, int, Cell[3][3]);
 	~Matrix();
 
 	int nRows();
 	int nColumns();
 
-	void setVaue(int, int, Cell);
+	Cell getValue(int, int);
+	void setValue(int, int, Cell);
 
+	Matrix getColumn(int index);
+	void setColumn(int index, Matrix<Cell> column);
 	Cell& operator()(int i, int j) { return m_cells[i - 1][j - 1]; }
 
 	Matrix& operator = (const Matrix&);		// Перегрузка оператора присваивания
@@ -55,9 +58,12 @@ Matrix<Cell>::Matrix(int n_nRows, int n_nCols)
 }
 
 template <typename Cell>
-Matrix<Cell>::Matrix(int n_nRows, int n_nCols, Cell* list)
+Matrix<Cell>::Matrix(int n_nRows, int n_nCols, Cell matrix[3][3])
 {
-
+	AllocateCells(n_nRows, n_nCols);
+	for (size_t i = 0; i < n_nRows; ++i)
+		for (size_t j = 0; j < n_nCols; j++)
+			m_cells[i][j] = matrix[i][j];
 }
 
 template <typename Cell>
@@ -69,7 +75,8 @@ Matrix<Cell>::~Matrix()
 template <typename Cell>
 Matrix<Cell>& Matrix<Cell>::operator=(const Matrix& M)
 {
-	return *this;
+	Matrix<Cell> result = Matrix(M);
+	return result;
 }
 
 template <typename Cell>
@@ -88,13 +95,27 @@ Matrix<Cell> Matrix<Cell>::operator+(const Matrix& M)
 template <typename Cell>
 Matrix<Cell> Matrix<Cell>::operator-(const Matrix& M)
 {
-	return Matrix();
+	Matrix<Cell> res(*this);
+	if (n_nRows == M.n_nRows && n_nCols == M.n_nCols)
+	{
+		for (int i = 0; i < n_nRows; i++)
+			for (int j = 0; j < n_nCols; j++)
+				res.m_cells[i][j] -= M.m_cells[i][j];
+		return res;
+	}
+	else throw "Stub!";
 }
 
 template <typename Cell>
 Matrix<Cell> Matrix<Cell>::operator*(const Matrix& M)
 {
-	return Matrix();
+	if (n_nCols != M.n_nRows)throw "Stub!";
+	Matrix<Cell> res = Matrix(n_nRows, M.n_nCols);
+	for (int i = 0; i < n_nRows; i++)
+		for (int j = 0; j < M.n_nCols; j++)
+			for (int k = 0; k < n_nCols; ++k)
+				res.m_cells[i][j] += m_cells[i][k] * M.m_cells[k][j];
+	return res;
 }
 
 template <typename Cell>
@@ -112,8 +133,10 @@ template <typename Cell>
 void Matrix<Cell>::FreeCells()
 {
 	for (int i = 0; i < n_nRows; i++)
-		delete m_cells[i];
-	delete m_cells;
+		if (m_cells[i])
+			delete m_cells[i];
+	if (m_cells)
+		delete m_cells;
 	n_nRows = 0;
 	n_nCols = 0;
 }
@@ -152,8 +175,31 @@ int Matrix<Cell>::nColumns()
 	return n_nCols;
 }
 
+template<typename Cell>
+inline Cell Matrix<Cell>::getValue(int i, int j)
+{
+	return m_cells[i][j];
+}
+
 template <typename Cell>
-void Matrix<Cell>::setVaue(int i, int j, Cell value)
+void Matrix<Cell>::setValue(int i, int j, Cell value)
 {
 	m_cells[i][j] = value;
+}
+
+template<typename Cell>
+inline Matrix<Cell> Matrix<Cell>::getColumn(int index)
+{
+	Matrix<Cell> result = Matrix(n_nRows, 1);
+	for (size_t i = 0; i < n_nRows; ++i)
+		result.setValue(i, 0, m_cells[i][index]);
+	return result;
+}
+
+template<typename Cell>
+inline void Matrix<Cell>::setColumn(int index, Matrix<Cell> column)
+{
+	if (column.nColumns() != 1) throw "Stub!";
+	for (size_t i = 0; i < n_nRows; ++i)
+		m_cells[i][index] = column.getValue(i, 0);
 }

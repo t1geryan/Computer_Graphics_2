@@ -69,5 +69,8 @@
     <Text Include="trapezoid.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="shape3.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
