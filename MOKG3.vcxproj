@@ -149,7 +149,7 @@
   <ItemGroup>
     <Text Include="shape3.txt" />
     <Text Include="trapezoid.txt" />
-    <Text Include="triangle.txt" />
+    <Text Include="shape1.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -38,7 +38,7 @@ WNDCLASS createWindowClass(HBRUSH bgColor, HCURSOR cursor, HINSTANCE hInstance, 
 }
 
 Render2D render;
-Loader triangleLoader("triangle.txt");
+Loader triangleLoader("shape1.txt");
 Loader trapezoidLoader("trapezoid.txt");
 Loader shape3Loader("shape3.txt");
 
