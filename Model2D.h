@@ -23,9 +23,13 @@ public:
 	void rotate(double angle);
 	void scale(double x, double y);
 	void reflect(bool isOnX, bool isOnY);
+
+	void setBorderColor(int color);
 private:
 	Matrix<double> m_vertices;
 	std::vector<int> m_indices;
+
+	int borderColor = 0x000000;
 
 	void applyTransform(Matrix<double> transformMatrix);
 };

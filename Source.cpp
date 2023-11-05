@@ -49,6 +49,9 @@ double translatingDelta = 0.1;
 double rotateDelta = 0.1;
 double scalingSize = .1;
 
+int unselectedColor = RGB(0,0,0);
+int selectedColor = RGB(0, 0, 255);
+
 LRESULT CALLBACK windowProcedure(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 {
 	HDC hdc = NULL;
@@ -66,6 +69,12 @@ LRESULT CALLBACK windowProcedure(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 		break;
 	case WM_PAINT:
 		hdc = GetDC(hWnd);
+		for (size_t i = 0; i < MODELS_COUNT; ++i) {
+			if (i == selectedModelIndex)
+				models[i]->setBorderColor(selectedColor);
+			else
+				models[i]->setBorderColor(unselectedColor);
+		}
 		render.draw(hdc);
 		ReleaseDC(hWnd, hdc);
 		break;
@@ -110,6 +119,7 @@ LRESULT CALLBACK windowProcedure(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 			break;
 		case 0x43: // C change figure
 			selectedModelIndex = (selectedModelIndex + 1) % MODELS_COUNT;
+		
 			break;
 		}
 		InvalidateRect(hWnd, NULL, TRUE);

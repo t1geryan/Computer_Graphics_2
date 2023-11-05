@@ -20,6 +20,8 @@ Vector2D Model2D::getVertex(const int index)
 
 void Model2D::draw(const HDC& hdc, int left, int top, int right, int bottom)
 {
+	HPEN pen = CreatePen(PS_SOLID, 1, borderColor);
+	SelectObject(hdc, pen);
 	if (m_vertices.nColumns() > 0) {
 		int width = right - left, height = bottom - top;
 		Vector2D currentVertex = Camera(getVertex(0)).toScreenCoordiantes(width, height);
@@ -29,6 +31,7 @@ void Model2D::draw(const HDC& hdc, int left, int top, int right, int bottom)
 			LineTo(hdc, left + (int) currentVertex.x(), top + (int) currentVertex.y());
 		}
 	}
+	DeleteObject(pen);
 }
 
 void Model2D::translate(double x, double y)
@@ -59,6 +62,11 @@ void Model2D::reflect(bool isOnX, bool isOnY)
 		applyTransform(AffineTransform::ReflectOX());
 	else
 		applyTransform(AffineTransform::ReflectOY());
+}
+
+void Model2D::setBorderColor(int color)
+{
+	borderColor = color;
 }
 
 void Model2D::applyTransform(Matrix<double> transformMatrix)
